@@ -1,0 +1,89 @@
+/*
+Theme name: bralex-theme
+Version: 1.0
+Description: sitio para catálogo de platzi
+Author: Bralex Mtz
+Authon URI: http://github.com/BralexMtz
+License: GNU General Public Licence v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+*/
+ body {
+  background-color: black;
+
+}
+body .container {
+  color: #fff;
+}
+header {
+  background-color: rgb(3, 29, 48);
+}
+a,
+h1,
+h2,
+h3,
+h4,
+li,
+p,
+span,
+ul {
+  font-family: Montserrat
+}
+.attachment-large {
+  max-width: 100%;
+  height: auto !important
+}
+h1 {
+  margin: 50px 0;
+  font-weight: 900;
+}
+ul {
+  margin-bottom: 0;
+}
+header nav li {
+  list-style: none;
+  display: inline-block;
+  padding: 0 15px
+}
+header nav li a {
+  color: #fff;
+  text-transform: uppercase
+}
+header nav li a:hover {
+  color: #fff
+}
+footer {
+  background-color: #1c3643;
+  padding: 10px 0
+}
+footer {
+  color: white;
+ 
+}
+footer p {
+  margin: 0;
+  color: #fff;
+  
+}
+.lista-productos h2 {
+  font-weight: 900
+}
+.lista-productos h4 {
+  font-weight: 400
+}
+.lista-productos h4 a {
+  color: rgb(150, 255, 64)
+}
+main.container{
+  position: relative;
+  min-height: 80%;
+
+}
+
+.col-6 a[rel]{
+  color: #01eb76;
+}
+
+.productos-relacionados a{
+    color: #01eb76;
+}
