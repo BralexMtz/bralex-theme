@@ -11,7 +11,7 @@ function init_template(){
 }
 add_action('after_setup_theme','init_template');
 
-
+// REGISTRO DE LOS ESTILOS Y SCRIPTS DE BOOSTRAP
 function assets(){
     // register simplemente queda como dependencia guardada
     wp_register_style('bootstrap','https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css', '', '4.4.1','all');
@@ -28,6 +28,7 @@ function assets(){
 
 add_action('wp_enqueue_scripts','assets');
 
+// REGISTRAR UN NUEVO WIDGET
 function sidebar(){
     register_sidebar( // esta funcion nos sirve para registrar un widget que sera despues llamado en el frontend para mostrarlo
                       // con la funcion dynamic_sidebar, la cual necesita el id registrado
@@ -45,6 +46,7 @@ function sidebar(){
     
 add_action( 'widgets_init', 'sidebar');
 
+// REGISTRO DE CUSTOM POST TYPE PRODUCTO
 function add_product_type(){
     $labels= array(
         'name' => 'Productos',
@@ -75,7 +77,7 @@ function add_product_type(){
 add_action( 'init', 'add_product_type' );
 
 
-
+// REGISTRO DE NUEVAS TAXONOMIAS
 function pgRegisterTax(){
     $args = array(
         'hierarchical' => true,
@@ -91,3 +93,76 @@ function pgRegisterTax(){
 }
 
 add_action( 'init', 'pgRegisterTax' );
+
+
+// REGISTRO DE CUSTOM POST FIELDS
+if( function_exists('acf_add_local_field_group') ):
+
+    acf_add_local_field_group(array(
+        'key' => 'group_60935e34da9c9',
+        'title' => 'Campos personalizados para plantilla institucional',
+        'fields' => array(
+            array(
+                'key' => 'field_6095860026e39',
+                'label' => 'Titulo',
+                'name' => 'titulo',
+                'type' => 'text',
+                'instructions' => '',
+                'required' => 1,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '50',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+                'maxlength' => '',
+            ),
+            array(
+                'key' => 'field_6095861326e3a',
+                'label' => 'imagen',
+                'name' => 'imagen',
+                'type' => 'image',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '50',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'return_format' => 'url',
+                'preview_size' => 'medium',
+                'library' => 'all',
+                'min_width' => '',
+                'min_height' => '',
+                'min_size' => '',
+                'max_width' => '',
+                'max_height' => '',
+                'max_size' => '',
+                'mime_types' => '',
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param' => 'page_template',
+                    'operator' => '==',
+                    'value' => 'template-institucional.php',
+                ),
+            ),
+        ),
+        'menu_order' => 0,
+        'position' => 'normal',
+        'style' => 'default',
+        'label_placement' => 'left',
+        'instruction_placement' => 'label',
+        'hide_on_screen' => '',
+        'active' => true,
+        'description' => '',
+    ));
+    
+    endif;
