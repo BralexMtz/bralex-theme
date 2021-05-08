@@ -8,7 +8,8 @@ get_header(); ?>
 <?php
 // obtener los campos personalizados del template
 $my_title = get_post_meta( get_the_ID(), 'titulo', true);
-$my_image = get_post_meta( get_the_ID(), 'imagen', true);
+$fields = get_fields();
+$my_image=$fields['imagen'];
 ?>
 <main class='container text-light'>
     <?php 

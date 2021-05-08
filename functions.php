@@ -23,7 +23,15 @@ function assets(){
     wp_register_script('popper','https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js','','1.16.0', true);// is footer?=true
     wp_enqueue_script('boostraps', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js', array('jquery','popper'),'4.4.1', true);
     
+    //registramos un script personalizado para el tema
     wp_enqueue_script('custom', get_template_directory_uri().'/assets/js/custom.js', '', '1.0', true);
+
+    // nos permite agregar objetos con data a un determinado script. 
+    // wp_add_inline_script() es otra opcion
+    wp_localize_script( 'custom', 'pg', array(
+        'ajaxurl' => admin_url('admin-ajax.php')
+        ));
+
 }
 
 add_action('wp_enqueue_scripts','assets');
@@ -96,73 +104,117 @@ add_action( 'init', 'pgRegisterTax' );
 
 
 // REGISTRO DE CUSTOM POST FIELDS
-if( function_exists('acf_add_local_field_group') ):
+// if( function_exists('acf_add_local_field_group') ):
 
-    acf_add_local_field_group(array(
-        'key' => 'group_60935e34da9c9',
-        'title' => 'Campos personalizados para plantilla institucional',
-        'fields' => array(
-            array(
-                'key' => 'field_6095860026e39',
-                'label' => 'Titulo',
-                'name' => 'titulo',
-                'type' => 'text',
-                'instructions' => '',
-                'required' => 1,
-                'conditional_logic' => 0,
-                'wrapper' => array(
-                    'width' => '50',
-                    'class' => '',
-                    'id' => '',
-                ),
-                'default_value' => '',
-                'placeholder' => '',
-                'prepend' => '',
-                'append' => '',
-                'maxlength' => '',
-            ),
-            array(
-                'key' => 'field_6095861326e3a',
-                'label' => 'imagen',
-                'name' => 'imagen',
-                'type' => 'image',
-                'instructions' => '',
-                'required' => 0,
-                'conditional_logic' => 0,
-                'wrapper' => array(
-                    'width' => '50',
-                    'class' => '',
-                    'id' => '',
-                ),
-                'return_format' => 'url',
-                'preview_size' => 'medium',
-                'library' => 'all',
-                'min_width' => '',
-                'min_height' => '',
-                'min_size' => '',
-                'max_width' => '',
-                'max_height' => '',
-                'max_size' => '',
-                'mime_types' => '',
-            ),
-        ),
-        'location' => array(
-            array(
-                array(
-                    'param' => 'page_template',
-                    'operator' => '==',
-                    'value' => 'template-institucional.php',
-                ),
-            ),
-        ),
-        'menu_order' => 0,
-        'position' => 'normal',
-        'style' => 'default',
-        'label_placement' => 'left',
-        'instruction_placement' => 'label',
-        'hide_on_screen' => '',
-        'active' => true,
-        'description' => '',
-    ));
+//     acf_add_local_field_group(array(
+//         'key' => 'group_60935e34da9c9',
+//         'title' => 'Campos personalizados para plantilla institucional',
+//         'fields' => array(
+//             array(
+//                 'key' => 'field_6095860026e39',
+//                 'label' => 'Titulo',
+//                 'name' => 'titulo',
+//                 'type' => 'text',
+//                 'instructions' => '',
+//                 'required' => 1,
+//                 'conditional_logic' => 0,
+//                 'wrapper' => array(
+//                     'width' => '50',
+//                     'class' => '',
+//                     'id' => '',
+//                 ),
+//                 'default_value' => '',
+//                 'placeholder' => '',
+//                 'prepend' => '',
+//                 'append' => '',
+//                 'maxlength' => '',
+//             ),
+//             array(
+//                 'key' => 'field_6095861326e3a',
+//                 'label' => 'imagen',
+//                 'name' => 'imagen',
+//                 'type' => 'image',
+//                 'instructions' => '',
+//                 'required' => 0,
+//                 'conditional_logic' => 0,
+//                 'wrapper' => array(
+//                     'width' => '50',
+//                     'class' => '',
+//                     'id' => '',
+//                 ),
+//                 'return_format' => 'url',
+//                 'preview_size' => 'medium',
+//                 'library' => 'all',
+//                 'min_width' => '',
+//                 'min_height' => '',
+//                 'min_size' => '',
+//                 'max_width' => '',
+//                 'max_height' => '',
+//                 'max_size' => '',
+//                 'mime_types' => '',
+//             ),
+//         ),
+//         'location' => array(
+//             array(
+//                 array(
+//                     'param' => 'page_template',
+//                     'operator' => '==',
+//                     'value' => 'template-institucional.php',
+//                 ),
+//             ),
+//         ),
+//         'menu_order' => 0,
+//         'position' => 'normal',
+//         'style' => 'default',
+//         'label_placement' => 'left',
+//         'instruction_placement' => 'label',
+//         'hide_on_screen' => '',
+//         'active' => true,
+//         'description' => '',
+//     ));
     
-    endif;
+//     endif;
+
+// ajax
+function pgFiltroProductos(){
+    $args = array(
+        'post_type'     => 'producto',
+        'post_per_page' => -1, //para devolver todos los elementos
+        'order'         =>'ASC',
+        'orderby'       =>'title'
+      );
+
+    if($_POST['categoria']){ //si la categoria es recibida en la petición
+        $args['tax_query'] = array( //Se crea una query para las taxonomias.
+            array(
+                'taxonomy' => 'categoria-productos', //nombre de la taxonomia
+                'field' => 'slug', // la forma de filtrar
+                'terms' => $_POST['categoria'] //filtramos por el slug de la categoria contenido en la taxonomia
+            )
+        );    
+    } // sino se obtienen todos los productos sin filtrar la taxonomia
+
+    $productos = new WP_Query($args);
+
+    if($productos->have_posts( )){ 
+
+        $return = array();
+
+        while($productos->have_posts( )){
+
+            $productos->the_post(); //recorre
+            $return[] = array(
+                'imagen' => get_the_post_thumbnail( get_the_id(), 'medium',array('class'=>'card-img-top') ),
+                'link' => get_the_permalink(),
+                'titulo' => get_the_title()
+            );
+        }
+
+        wp_send_json( $return ); //devuelve el array en objeto json
+
+    }
+
+}
+
+add_action( 'wp_ajax_nopriv_pgFiltroProductos', 'pgFiltroProductos'); //para usuarios sin registro
+add_action( 'wp_ajax_pgFiltroProductos', 'pgFiltroProductos'); // para usuarios registrados

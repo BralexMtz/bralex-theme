@@ -23,6 +23,22 @@
     <div class="lista-productos my-5">
       <h2 class="text-center text-light">PRODUCTOS</h2>
       <div class="row">
+        <div class="col-12">
+          <select class="form-control" name="categorias-productos" id="categorias-productos">
+            <option value="">Todas las categorias</option>
+            <?php $terms=get_terms('categoria-productos',array('hide_empty'=> true )); // se obtienen los terminos de una taxonomia
+            ?> 
+            <?php 
+            foreach($terms as $term){
+              echo '<option value=" '.$term->slug.' ">'; //se usara para el ajax
+              echo  $term->name; 
+              echo '</option>';
+            }
+            ?>
+          </select>
+        </div>
+      </div>
+      <div id="resultado-productos" class="row justify-content-center">
       <?php
         $args = array(
           'post_type'     => 'producto',
