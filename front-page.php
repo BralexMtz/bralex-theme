@@ -12,7 +12,6 @@
         while(have_posts(  )){
           the_post(  );
           ?>
-          <!-- <h2 class="my-3"><?php #the_title( );?></h2> -->
           <br>
           <?php the_content( ); ?>
           <?php
