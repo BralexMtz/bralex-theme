@@ -104,7 +104,7 @@ add_action( 'init', 'pgRegisterTax' );
 
 
 
-// ajax
+// ajax function to respond
 function pgFiltroProductos(){
     $args = array(
         'post_type'     => 'producto',
@@ -147,3 +147,48 @@ function pgFiltroProductos(){
 
 add_action( 'wp_ajax_nopriv_pgFiltroProductos', 'pgFiltroProductos'); //para usuarios sin registro
 add_action( 'wp_ajax_pgFiltroProductos', 'pgFiltroProductos'); // para usuarios registrados
+
+// funcion para registrar la ruta del api 
+function novedadesAPI(){ //register route
+    register_rest_route( 
+        'pg/v1', 
+        '/novedades/(?P<cantidad>\d+)', 
+        array(
+            'methods' => 'GET',
+            'callback' => 'pedidoNovedades'
+        )
+    );
+}
+
+add_action( 'rest_api_init', 'novedadesAPI' );
+
+// funcion para obtener las novedades 
+function pedidoNovedades($data){
+    $args = array(
+        'post_type'     => 'post',
+        'post_per_page' => $data['cantidad'], //para devolver la cantidad que se recibe como parametro
+        'order'         =>'ASC',
+        'orderby'       =>'title'
+      );
+
+    $novedades = new WP_Query($args);
+
+    if($novedades->have_posts( )){ 
+
+        $return = array();
+
+        while($novedades->have_posts( )){
+
+            $novedades->the_post(); //recorre
+            $return[] = array(
+                'imagen' => get_the_post_thumbnail( get_the_id(), 'medium',array('class'=>'card-img-top') ),
+                'link' => get_the_permalink(),
+                'titulo' => get_the_title()
+            );
+        }
+    }
+
+    // en este casi la api se encarga de convertirlo en json
+    return $return ; 
+
+}
