@@ -193,3 +193,27 @@ function pedidoNovedades($data){
     return $return ; 
 
 }
+
+
+function pgRegisterBlock(){
+    // get configurations of new block
+    $assets = include_once get_template_directory(  ).'/blocks/build/index.asset.php';
+
+    //register script
+    wp_register_script( 
+        'pg-block', 
+        get_template_directory_uri().'/blocks/build/index.js', 
+        $assets['dependencies'], 
+        $assets['version'] 
+    );
+
+    // link the block with a script
+    register_block_type(
+        'pg/basic',
+        array(
+            'editor_script'=> 'pg-block' //manejador del bloque
+        )
+    );
+
+}
+add_action( 'init', 'pgRegisterBlock' );
