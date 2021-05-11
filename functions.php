@@ -29,7 +29,8 @@ function assets(){
     // nos permite agregar objetos con data a un determinado script. 
     // wp_add_inline_script() es otra opcion
     wp_localize_script( 'custom', 'pg', array(
-        'ajaxurl' => admin_url('admin-ajax.php')
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'apiurl' => home_url( 'wp-json/pg/v1/' )
         ));
 
 }

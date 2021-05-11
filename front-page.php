@@ -71,7 +71,14 @@
       ?>
       </div>
     </div>
-
+    <div class="row">
+      <div class="col-12">
+        <h1>Novedades</h1>
+      </div>
+      <div id="resultado-novedades" class="row">
+      
+      </div>
+    </div>
 </main>
 
 <?php get_footer(); ?>
