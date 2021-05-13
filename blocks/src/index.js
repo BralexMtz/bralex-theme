@@ -1,5 +1,9 @@
 import { registerBlockType } from '@wordpress/blocks';
-import { TextControl } from '@wordpress/components';
+import { TextControl,PanelBody, PanelRow  } from '@wordpress/components';
+import { InspectorControls } from '@wordpress/block-editor'; // Esta librería está disponible desde que instalamos el paquete "wordpress/scripts desde NPM
+import ServerSideRender from '@wordpress/server-side-render'; 
+
+
 
 registerBlockType(
   'pg/basic',
@@ -19,12 +23,32 @@ registerBlockType(
       const handlerOnChangeInput = (newContent) => {
         // el valor del input reflejado
         setAttributes({content:newContent})
-
+        
       }
       
-      return <TextControl label="Complete el campo" value={content} onChange={handlerOnChangeInput} />
+      // componente fragment <> </>
+      return <>  
+              <InspectorControls>
+                  <PanelBody // Primer panel en la sidebar
+                      title="Modificar texto del Bloque Básico"
+                      initialOpen={ false }
+                  >
+                      <PanelRow>
+                          <TextControl
+                              label="Complete el campo" // Indicaciones del campo
+                              value={ content } // Asignación del atributo correspondiente
+                              onChange={ handlerOnChangeInput } // Asignación de función para gestionar el evento OnChange
+                          />
+                      </PanelRow>
+                  </PanelBody>
+              </InspectorControls>
+              <ServerSideRender // Renderizado de bloque dinámico
+                  block="pg/basic" // Nombre del bloque
+                  attributes={ props.attributes } // Se envían todos los atributos
+              />
+          </>
  
     },
-    save: (props)=> <h2>{props.attributes.content}</h2>
+    save: ()=>  null // para buscar una función de renderizado en php
   }
 )

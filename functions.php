@@ -199,7 +199,7 @@ function pgRegisterBlock(){
     // get configurations of new block
     $assets = include_once get_template_directory(  ).'/blocks/build/index.asset.php';
 
-    //register script
+    //register script asociado al bloque nuevo
     wp_register_script( 
         'pg-block', 
         get_template_directory_uri().'/blocks/build/index.js', 
@@ -211,9 +211,22 @@ function pgRegisterBlock(){
     register_block_type(
         'pg/basic',
         array(
-            'editor_script'=> 'pg-block' //manejador del bloque
+            'editor_script' => 'pg-block', // Handler del Script que registramos arriba
+            'attributes'      => array( // Repetimos los atributos del bloque, pero cambiamos los objetos por arrays
+                'content' => array(
+                    'type'    => 'string',
+                    'default' => 'Hello world'
+                )
+            ),
+            'render_callback' => 'pgRenderDinamycBlock' // Función de callback para generar el SSR (Server Side Render)
         )
     );
 
 }
 add_action( 'init', 'pgRegisterBlock' );
+
+
+// function para bloque dinamico
+function pgRenderDinamycBlock($attributes,$content){
+    return '<h2>'.$attributes['content'].'</h2>';
+}
