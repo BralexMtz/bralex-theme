@@ -216,6 +216,12 @@ function pgRegisterBlock(){
                 'content' => array(
                     'type'    => 'string',
                     'default' => 'Hello world'
+                ),
+                'mediaURL' => array(
+                    'type' => 'string'
+                ),
+                'mediaAlt' => array(
+                    'type' => 'string'
                 )
             ),
             'render_callback' => 'pgRenderDinamycBlock' // Función de callback para generar el SSR (Server Side Render)
@@ -228,5 +234,7 @@ add_action( 'init', 'pgRegisterBlock' );
 
 // function para bloque dinamico
 function pgRenderDinamycBlock($attributes,$content){
-    return '<h2>'.$attributes['content'].'</h2>';
+    return('<h2 class="my-3">'.$attributes['content'].'</h2>
+    <img src="'.$attributes['mediaURL'].'"alt="'.$attributes['mediaAlt'].'"/>
+    <hr>');
 }

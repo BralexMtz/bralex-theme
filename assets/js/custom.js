@@ -1,6 +1,6 @@
 (function($){
   $('#categorias-productos').change(function(){
-    $.ajax({
+    $.ajax({ 
       url: pg.ajaxurl,
       method:"POST",
       data:{

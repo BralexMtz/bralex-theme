@@ -120,6 +120,12 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('pg/
     content: {
       type: "string",
       default: "Hello World"
+    },
+    mediaURL: {
+      type: "string"
+    },
+    mediaAlt: {
+      type: "string"
     }
   },
   edit: function edit(props) {
@@ -133,20 +139,46 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('pg/
       setAttributes({
         content: newContent
       });
+    };
+
+    var handlerOnSelectMediaUpload = function handlerOnSelectMediaUpload(image) {
+      setAttributes({
+        mediaURL: image.sizes.full.url,
+        // El objeto image cuenta con todas las propiedades de los archivos de la Media Library de WordPress, entre ellas los diferentes tamaños
+        mediaAlt: image.alt // También cuenta con el Texto Alternativo definido en la Media Library para cada archivo
+
+      });
     }; // componente fragment <> </>
 
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelBody"] // Primer panel en la sidebar
     , {
       title: "Modificar texto del Bloque B\xE1sico",
-      initialOpen: false
+      initialOpen: true
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["TextControl"], {
-      label: "Complete el campo" // Indicaciones del campo
+      label: "Titulo del bloque" // Indicaciones del campo
       ,
       value: content // Asignación del atributo correspondiente
       ,
       onChange: handlerOnChangeInput // Asignación de función para gestionar el evento OnChange
 
+    }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelBody"], {
+      title: "Selecciona una imagen",
+      initialOpen: true
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["MediaUpload"], {
+      onSelect: handlerOnSelectMediaUpload // Asignación de función para gestionar el evento OnSelect
+      ,
+      type: "image" // Limita los tipos de archivos que se pueden seleccionar
+      // Se envía el evento open y el renderizado del elemento que desencadenará la apertura de la librería, en este caso un botón
+      ,
+      render: function render(_ref) {
+        var open = _ref.open;
+        //Agregamos las clases de los botones de WordPress habituales para que mantenga el estilo dentro del editor
+        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+          className: "components-icon-button image-block-btn is-button is-default is-large",
+          onClick: open
+        }, "Elegir una imagen");
+      }
     })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_4___default.a // Renderizado de bloque dinámico
     , {
       block: "pg/basic" // Nombre del bloque
